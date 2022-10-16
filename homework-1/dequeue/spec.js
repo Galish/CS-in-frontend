@@ -1,4 +1,4 @@
-import Dequeue from './dequeue.js'
+import Dequeue from './dequeue'
 
 describe('Linked list based Dequeue', () => {
 	it('should create double-ended queue instance', () => {

@@ -1,4 +1,4 @@
-import Structure from './structure.js'
+import Structure from './structure'
 
 describe('Fixed size array based Stack', () => {
 

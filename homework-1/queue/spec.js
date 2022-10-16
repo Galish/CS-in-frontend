@@ -1,4 +1,4 @@
-import Queue from './queue.js'
+import Queue from './queue'
 
 describe('Linked list based Queue', () => {
 

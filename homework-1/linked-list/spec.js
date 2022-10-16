@@ -1,6 +1,6 @@
 import jest from 'jest-mock'
 
-import LinkedList from './linked-list.js'
+import LinkedList from './linked-list'
 
 describe('Doubly linked list', () => {
 
@@ -173,7 +173,7 @@ describe('Doubly linked list', () => {
 		list.addLast(4)
 		list.addLast(5)
 
-		expect(isIterable(list)).toBe(true)
+		expect(typeof list[ Symbol.iterator ]).toBe('function')
 		expect([ ...list ]).toEqual([ 1, 2, 3, 4, 5 ])
 	})
 
@@ -186,18 +186,8 @@ describe('Doubly linked list', () => {
 		list.addLast(4)
 		list.addLast(5)
 
-		expect(isIterable(list.reverse)).toBe(true)
+		expect(typeof list.reverse[ Symbol.iterator ]).toBe('function')
 		expect([ ...list.reverse ]).toEqual([ 5, 4, 3, 2, 1 ])
 	})
 
 })
-
-
-function isIterable(obj) {
-	// checks for null and undefined
-	if (obj == null) {
-		return false
-	}
-
-	return typeof obj[Symbol.iterator] === 'function'
-}

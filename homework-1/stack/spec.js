@@ -1,4 +1,4 @@
-import Stack from './stack.js'
+import Stack from './stack'
 
 describe('Fixed size array based Stack', () => {
 
