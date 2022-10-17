@@ -145,7 +145,7 @@ describe('Doubly linked list', () => {
 	})
 
 	it('should print a content of the list', () => {
-		const spyFn = jest.spyOn(console, 'log');
+		const spyFn = jest.spyOn(console, 'log').mockImplementation()
 
 		const list = new LinkedList()
 
@@ -173,8 +173,8 @@ describe('Doubly linked list', () => {
 		list.addLast(4)
 		list.addLast(5)
 
-		expect(typeof list[ Symbol.iterator ]).toBe('function')
-		expect([ ...list ]).toEqual([ 1, 2, 3, 4, 5 ])
+		expect(typeof list.values()[ Symbol.iterator ]).toBe('function')
+		expect([ ...list.values() ]).toEqual([ 1, 2, 3, 4, 5 ])
 	})
 
 	it('should implement the iterable API (reversed)', () => {
@@ -186,8 +186,8 @@ describe('Doubly linked list', () => {
 		list.addLast(4)
 		list.addLast(5)
 
-		expect(typeof list.reverse[ Symbol.iterator ]).toBe('function')
-		expect([ ...list.reverse ]).toEqual([ 5, 4, 3, 2, 1 ])
+		expect(typeof list.reverse()[ Symbol.iterator ]).toBe('function')
+		expect([ ...list.reverse() ]).toEqual([ 5, 4, 3, 2, 1 ])
 	})
 
 })

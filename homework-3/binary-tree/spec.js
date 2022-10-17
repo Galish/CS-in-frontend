@@ -41,7 +41,6 @@ describe('Binary search tree', () => {
 	})
 
 	it('depth first inorder traversal', () => {
-
 		const tree = new BinarySearchTree()
 
 		tree.insert(8, '8')

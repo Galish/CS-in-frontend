@@ -1,4 +1,4 @@
-import BinarySearchTree from './binary-search-tree'
+import BinarySearchTree from '../binary-tree/binary-search-tree'
 
 export default class BinaryTreeSet {
 	constructor(arr = []) {

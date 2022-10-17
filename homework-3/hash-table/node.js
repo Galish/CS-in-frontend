@@ -1,6 +1,5 @@
-export default class Node {
-	constructor(key, value) {
-		this.key = key
+export default class HashMapNode {
+	constructor(value) {
 		this.value = value
 		this.next = null
 	}

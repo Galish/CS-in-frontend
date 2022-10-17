@@ -1,4 +1,4 @@
-import LinkedList from './linked-list'
+import Node from './node'
 
 export default class HashMap {
 	constructor(size = 31) {
@@ -22,51 +22,50 @@ export default class HashMap {
 
 	set(key, value) {
 		const index = this.hashFunc(key)
+		const newNode = new Node({ key, value })
 
-		if (!this.isList(this.arr[ index ])) {
-			this.arr[ index ] = new LinkedList()
+		if (this.arr[ index ] instanceof Node) {
+			newNode.next = this.arr[ index ]
 		}
 
-		this.arr[ index ].addLast(key, value)
+		this.arr[ index ] = newNode
 	}
 
 	get(key) {
-		const list = this.arr[ this.hashFunc(key) ]
-		let node = list.first
+		let current = this.arr[ this.hashFunc(key) ]
 
-		while (node != null) {
-			if (node.key === key) {
-				return node.value
+		while (current != null) {
+			if (current.value.key === key) {
+				return current.value.value
 			}
 
-			node = node.next
+			current = current.next
 		}
 	}
 
 	keys() {
-		const arr = this.arr
-		const isList = this.isList
+		function* intoIter(arr) {
+			for (const index in arr) {
+				let node = arr[ index ]
 
-		return {
-			*[ Symbol.iterator ]() {
-				for (const list of arr) {
-					if (!isList(list)) {
-						continue
-					}
+				while (node != null) {
+					yield node.value.key
 
-					let node = list.first
-
-					while (node != null) {
-						yield node.key
-
-						node = node.next
-					}
+					node = node.next
 				}
 			}
 		}
-	}
 
-	isList(obj) {
-		return obj instanceof LinkedList
+		const iter = intoIter(this.arr)
+
+		return {
+			[ Symbol.iterator ]() {
+				return this
+			},
+
+			next() {
+				return iter.next()
+			}
+		}
 	}
 }

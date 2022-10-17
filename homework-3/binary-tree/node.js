@@ -1,8 +1,6 @@
-export default class Node {
-	constructor(key, value) {
-		this.key = key
+export default class BinarySearchTreeNode {
+	constructor(value) {
 		this.value = value
-
 		this.leftChild = null
 		this.rightChild = null
 	}

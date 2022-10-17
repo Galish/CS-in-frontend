@@ -25,7 +25,28 @@ export default class DynamicArray {
 		return this.arr[ index ]
 	}
 
-	*[ Symbol.iterator ]() {
-		yield* this.arr
+	values() {
+		const arr = this.arr
+		const length = this.length
+		let index = 0
+
+		return {
+			[ Symbol.iterator ]() {
+				return this
+			},
+
+			next() {
+				if (index === length) {
+					return {
+						done: true
+					}
+				}
+
+				return {
+					value: arr[ index++ ],
+					done: false
+				}
+			}
+		}
 	}
 }

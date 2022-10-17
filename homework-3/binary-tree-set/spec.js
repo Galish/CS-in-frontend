@@ -11,13 +11,13 @@ describe('Binary tree set', () => {
 	it('should find value', () => {
 		const treeSet = new BinaryTreeSet([ -432, 0, 1, 1, 2, 2, 2, 3, 4, 5, 6, 98 ])
 
-		expect(treeSet.has(53)).toBe(false)
+		expect(treeSet.has(98)).toBeTruthy()
 	})
 
 	it('shouldn\'t find value', () => {
 		const treeSet = new BinaryTreeSet([ -432, 0, 1, 1, 2, 2, 2, 3, 4, 5, 6, 98 ])
 
-		expect(treeSet.has(98)).toBe(true)
+		expect(treeSet.has(53)).toBeFalsy()
 	})
 
 })

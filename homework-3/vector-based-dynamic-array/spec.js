@@ -57,7 +57,7 @@ describe('Vector based dynamic array', () => {
 		dynamicArray.add(4)
 		dynamicArray.add(5)
 
-		expect(typeof dynamicArray[ Symbol.iterator ]).toBe('function')
-		expect([ ...dynamicArray ]).toEqual([ 1, 2, 3, 4, 5 ])
+		expect(typeof dynamicArray.values()[ Symbol.iterator ]).toBe('function')
+		expect([ ...dynamicArray.values() ]).toEqual([ 1, 2, 3, 4, 5 ])
 	})
 })

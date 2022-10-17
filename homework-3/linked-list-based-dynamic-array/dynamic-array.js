@@ -35,12 +35,26 @@ export default class DynamicArray {
 		}
 	}
 
-	*[ Symbol.iterator ]() {
-		let node = this.list.first
+	values() {
+		function* intoIter(list) {
+			let node = list.first
 
-		while (node) {
-			yield* node.arr
-			node = node.next
+			while (node) {
+				yield* node.arr
+				node = node.next
+			}
+		}
+
+		const iter = intoIter(this.list)
+
+		return {
+			[ Symbol.iterator ]() {
+				return this
+			},
+
+			next() {
+				return iter.next()
+			}
 		}
 	}
 }

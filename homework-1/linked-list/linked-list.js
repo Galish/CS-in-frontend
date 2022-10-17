@@ -89,27 +89,57 @@ export default class LinkedList {
 		}
 	}
 
-	get reverse() {
-		const _this = this
+	values() {
+		let current = this.first
 
 		return {
-			*[ Symbol.iterator ]() {
-				let current = _this.last
+			[ Symbol.iterator ]() {
+				return this
+			},
 
-				while(current != null) {
-					yield current.value
-					current = current.prev
+			next() {
+				if (current === null) {
+					return {
+						done: true
+					}
+				}
+
+				const { value } = current
+
+				current = current.next
+
+				return {
+					value,
+					done: false
 				}
 			}
 		}
 	}
 
-	*[ Symbol.iterator ]() {
-		let current = this.first
+	reverse() {
+		let current = this.last
 
-		while(current != null) {
-			yield current.value
-			current = current.next
+		return {
+			[ Symbol.iterator ]() {
+				return this
+			},
+
+			next() {
+				if (current === null) {
+					return {
+						done: true
+					}
+				}
+
+				const { value } = current
+
+				current = current.prev
+
+				return {
+					value,
+					done: false
+				}
+			}
 		}
 	}
 }
