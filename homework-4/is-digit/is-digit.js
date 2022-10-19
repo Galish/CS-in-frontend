@@ -1,6 +1,7 @@
 const UNICODE_GROUPS = [
 	[ 48, 57 ], // Ascii / arab
 	[ 8544, 8575 ], // roman
+	[ 65799, 65846 ], // aegean
 ]
 
 export default function isDigit(str = '') {
@@ -8,7 +9,8 @@ export default function isDigit(str = '') {
 	let currentGroupIndex
 
 	for (const char of normalized) {
-		const groupIndex = charCodeGroup(char)
+		const code = char.codePointAt(0)
+		const groupIndex = binarySearch(code, UNICODE_GROUPS, ([ min ]) => min)
 
 		if (currentGroupIndex === undefined) {
 			currentGroupIndex = groupIndex
@@ -20,14 +22,28 @@ export default function isDigit(str = '') {
 	return true
 }
 
-function charCodeGroup(char) {
-	const code = char.codePointAt(0)
+function binarySearch(value, sortedArray = [], getValue) {
+	let leftIndex = 0
+	let rightIndex = sortedArray.length - 1
 
-	for (const [ index, [ codeFrom, codeTo ] ] of UNICODE_GROUPS.entries()) {
-		if (code >= codeFrom && code <= codeTo) {
-			return index
+	while (leftIndex <= rightIndex) {
+		const currentIndex = Math.round((leftIndex + rightIndex) / 2)
+		const current = sortedArray[ currentIndex ]
+
+		if (inRange(current, value)) {
+			return currentIndex
+		}
+
+		const compareWith = getValue?.(current) ?? current
+
+		if (value < compareWith) {
+			rightIndex = currentIndex - 1
+		} else {
+			leftIndex = currentIndex + 1
 		}
 	}
+}
 
-	return null
+function inRange([ min, max ], value) {
+	return value >= min && value <= max
 }

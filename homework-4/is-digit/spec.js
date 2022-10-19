@@ -22,4 +22,12 @@ describe('Is the input string a digit', () => {
 		expect(isDigit('Ⅻ1Ⅶ')).toBeFalsy()
 	})
 
+	it('Validating aegean numeral string', () => {
+		expect(isDigit('𐄈𐄉𐄌𐄒')).toBeTruthy()
+	})
+
+	it('Validating a string containing aegean numerals', () => {
+		expect(isDigit('𐄈𐄉a𐄌𐄒')).toBeFalsy()
+	})
+
 })
