@@ -3,7 +3,7 @@ export default function seq(...iterables) {
 	const parentIterator = iterables[ Symbol.iterator ]()
 
 	const parentNext = () => {
-		iterator = parentIterator.next().value?.[ Symbol.iterator ]()
+		iterator = parentIterator.next().value?.[ Symbol.iterator ]?.()
 	}
 
 	parentNext()
