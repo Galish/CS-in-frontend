@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Once/on events async iterators</title>
+	</head>
+	<body>
+		<div
+			id="test"
+			style="height:100px;width:100px;background-color:red;color:white;line-height:100px;text-align:center;"
+		>
+			Click me!!!
+		</div>
+
+		<script type="module">
+			import { filter, map, on, once, take, seq } from './library.js';
+
+			const $el = document.getElementById('test');
+
+			const asyncIterator = seq(
+				once(document.body, 'mousedown'),
+				map(
+					take(
+						filter(
+							on(document.body, 'mouseup'),
+							({ screenX, screenY }) => (
+								screenX > 50
+								&&
+								screenY > 100
+							)
+						),
+						10
+					),
+					({ screenX, screenY, type }) => [
+						type,
+						screenX,
+						screenY
+					]
+				)
+			);
+
+			(async function(){
+				for await (const e of asyncIterator) {
+					console.log(e)
+				}
+			})();
+		</script>
+	</body>
+</html>
