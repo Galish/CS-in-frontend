@@ -80,6 +80,47 @@ export default class LinkedList {
 		return node.value
 	}
 
+	pop(value) {
+		const node = this.find(value)
+
+		if (node == null) {
+			return null
+		}
+
+		if (this.first === node) {
+			this.popFirst()
+			return node
+		}
+
+		if (this.last === node) {
+			this.popLast()
+			return node
+		}
+
+		node.prev.next = node.next
+		node.next.prev = node.prev
+		node.next = null
+		node.prev = null
+
+		this.length--
+
+		return node.value
+	}
+
+	find(value) {
+		let current = this.first
+
+		while (current != null) {
+			if (current.value === value) {
+				return current
+			}
+
+			current = current.next
+		}
+
+		return null
+	}
+
 	print() {
 		let current = this.first
 
