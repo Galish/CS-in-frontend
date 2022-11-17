@@ -1,10 +1,10 @@
 import Workers from './workers.js'
 
 export default class Scheduler {
-	#options
-	#workers
 	#exec
 	#isRunning = false
+	#options
+	#workers
 
 	constructor(options = {}) {
 		this.#options = {
