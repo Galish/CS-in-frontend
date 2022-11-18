@@ -1,37 +1,36 @@
-import { useLayoutEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
 
 import './Form.css'
-import withVisitor from './with-visitor'
+import withVisitor from './visitor/with-visitor'
+import { callAll, preventDefault } from './helpers'
 
-const Form = ({ emit }) => {
-	const ref = useRef(null)
+const Form = ({ emit }) => (
+	<form
+		className="form"
+		onSubmit={callAll(
+			preventDefault,
+			emit.bind(null, 'submit')
+		)}
+		ref={emit.bind(null, 'render')}
+	>
+		<input
+			className="form__input"
+			name="text"
+			onBlur={emit.bind(null, 'blur')}
+			onChange={emit.bind(null, 'input')}
+			onFocus={emit.bind(null, 'focus')}
+			type="text"
+		/>
 
-	useLayoutEffect(() => {
-		emit('mount', ref.current)
+		<input
+			className="form__submit"
+			type="submit"
+		/>
+	</form>
+)
 
-		return () => emit('unmount', ref.current)
-	}, [])
-
-	return (
-		<form
-			className="form"
-			onSubmit={emit.bind(this, 'submit')}
-			ref={ref}
-		>
-			<input
-				className="form__input"
-				onBlur={emit.bind(this, 'blur')}
-				onChange={emit.bind(this, 'input')}
-				onFocus={emit.bind(this, 'focus')}
-				type="text"
-			/>
-
-			<input
-				className="form__submit"
-				type="submit"
-			/>
-		</form>
-	)
+Form.propTypes = {
+	emit: PropTypes.func
 }
 
 export default withVisitor(Form)

@@ -21,5 +21,8 @@ body {
 #root {
 	flex: 1;
 	display: flex;
-	align-items: stretch;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 20px;
 }

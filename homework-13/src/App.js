@@ -1,61 +1,56 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import './App.css'
 import Form from './Form'
-import { on, once, inView } from './visitors'
-
-const onFocus = ({ target}) => target.style.borderColor = 'red'
-
-const onBlur = ({ target}) => target.style.borderColor = 'inherit'
-
-const onEnter = () => console.log('onEnter')
-
-const onLeave = () => console.log('onLeave')
-
-const onSubmit = event => console.log('once', event.preventDefault())
+import { addOutline, changeBgColor, removeOutline } from './helpers'
+import { on, inView } from './visitor'
 
 const App = () => {
-	const [ events, setEvents ] = useState([])
+	const [ data = [], setData ] = useState([])
 
-	const pushEvent = eventName => setEvents(prevState => [
-		...prevState,
-		eventName
-	])
+	const appendData = value => setData(prevState => [ ...prevState, value ])
+
+	const handleSubmit = ({ target }) => {
+		const formData = new FormData(target)
+
+		appendData(formData.get('text'))
+		target.reset()
+	}
+
+	const accept = useMemo(
+		() => [
+			on('focus', addOutline),
+			on('blur', removeOutline),
+			on('submit', handleSubmit),
+			inView({
+				// delay: 1_000,
+				enter: changeBgColor(),
+				leave: changeBgColor('#ebebeb'),
+				stream: async(asyncIterable) => {
+					for await (const [ eventName ] of asyncIterable) {
+						console.log('inView stream event:', eventName);
+					}
+				}
+			})
+		],
+		[]
+	)
 
 	return (
-		<div
-			className="container"
-		>
-			<div
-				className="container__feed"
-			>
-				{events.map((eventName, i) => (
-					<p
-						key={i}
-					>
-						{i + 1}. {eventName}
-					</p>
-				))}
-			</div>
+		<>
+			<Form
+				accept={accept}
+			/>
 
-			<div
-				className="container__content"
-			>
-				<Form
-					accept={[
-						on('focus', () => pushEvent('focus')),
-						on('blur', () => pushEvent('blur')),
-						on('input', () => pushEvent('input')),
-						inView({
-							delay: 1_000,
-							enter: () => pushEvent('enter'),
-							leave: () => pushEvent('leave')
-						}),
-						once('submit', onSubmit)
-					]}
-				/>
-			</div>
-		</div>
+			<ul>
+				{data.map((value, index) => (
+					<li
+						key={index}
+					>
+						{value}
+					</li>
+				))}
+			</ul>
+		</>
 	)
 }
 
