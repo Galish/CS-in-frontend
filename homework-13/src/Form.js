@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 
 import './Form.css'
-import withVisitor from './visitor/with-visitor'
 import { callAll, preventDefault } from './helpers'
+import { withVisitor } from './visitor'
 
 const Form = ({ emit }) => (
 	<form

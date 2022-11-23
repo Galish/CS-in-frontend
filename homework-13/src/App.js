@@ -22,7 +22,6 @@ const App = () => {
 			on('blur', removeOutline),
 			on('submit', handleSubmit),
 			inView({
-				// delay: 1_000,
 				enter: changeBgColor(),
 				leave: changeBgColor('#ebebeb'),
 				stream: async(asyncIterable) => {
