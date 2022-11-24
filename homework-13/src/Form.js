@@ -4,21 +4,21 @@ import './Form.css'
 import { callAll, preventDefault } from './helpers'
 import { withVisitor } from './visitor'
 
-const Form = ({ emit }) => (
+const Form = ({ ctx }) => (
 	<form
 		className="form"
 		onSubmit={callAll(
 			preventDefault,
-			emit.bind(null, 'submit')
+			ctx.emit.bind(null, 'submit')
 		)}
-		ref={emit.bind(null, 'render')}
+		ref={ctx.ref}
 	>
 		<input
 			className="form__input"
 			name="text"
-			onBlur={emit.bind(null, 'blur')}
-			onChange={emit.bind(null, 'input')}
-			onFocus={emit.bind(null, 'focus')}
+			onBlur={ctx.emit.bind(null, 'blur')}
+			onChange={ctx.emit.bind(null, 'input')}
+			onFocus={ctx.emit.bind(null, 'focus')}
 			type="text"
 		/>
 

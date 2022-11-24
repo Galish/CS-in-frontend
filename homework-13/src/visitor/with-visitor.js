@@ -1,19 +1,36 @@
-import { useCallback } from 'react'
+import { EventEmitter2 as Emitter } from 'eventemitter2'
+import { useEffect, useMemo, useRef } from 'react'
 
 const withWisitor = WrappedComponent => ({ accept = [], ...restProps }) => {
-	const emit = useCallback(
-		(eventName, ...args) => {
-			for (const visitor of accept) {
-				visitor.visit(eventName, ...args)
-			}
-		},
-		[ accept ]
+	const ref = useRef(null)
+
+	const emitter = useMemo(
+		() => new Emitter(),
+		[]
 	)
+
+	const ctx = useMemo(
+		() => ({
+			emit: (...args) => emitter.emit(...args),
+			ref
+		}),
+		[ emitter ]
+	)
+
+	useEffect(() => {
+		const unmountCbs = [];
+
+		for (const visitor of accept) {
+			unmountCbs.push(visitor.visit({ emitter, ref }))
+		}
+
+		return () => unmountCbs.forEach(cb => cb?.())
+	}, [ accept, emitter ])
 
 	return (
 		<WrappedComponent
 			{...restProps}
-			emit={emit}
+			ctx={ctx}
 		/>
 	)
 }

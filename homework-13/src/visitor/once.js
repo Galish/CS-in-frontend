@@ -1,12 +1,13 @@
-export default function once(eventName, cb) {
-	let isVisited = false
-
+export default function once(eventName, handler) {
 	return {
-		visit: (...args) => {
-			if (eventName === args[ 0 ] && !isVisited) {
-				cb(...args.slice(1))
-				isVisited = true
-			}
+		visit: ({ emitter }) => {
+			const listener = emitter.once(
+				eventName,
+				handler,
+				{ objectify: true }
+			)
+
+			return () => listener.off()
 		}
 	}
 }
