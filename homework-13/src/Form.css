@@ -1,0 +1,22 @@
+.form {
+	display: flex;
+	gap: 10px;
+	background-color: white;
+	padding: 20px;
+}
+
+.form__input {
+	width: 150px;
+	background-color: white;
+	border: 1px solid #999;
+	outline: none;
+	border-radius: 5px;
+}
+
+.form__submit {
+	cursor: pointer;
+	border: none;
+	color: white;
+	background-color: red;
+	border-radius: 5px;
+}
