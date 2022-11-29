@@ -1,23 +1,8 @@
 export default class EventEmitter {
     #listeners = new Map()
-    #parent
-
-    constructor(parent) {
-        this.#parent = parent
-    }
 
     emit(eventName, ...data) {
-        if (eventName == null) {
-            throw new Error('Specify an event name')
-        }
-
-        this.#parent?.emit?.(
-            eventName,
-            {
-                data: singleValueOrIter(data),
-                target: this
-            }
-        )
+        this.validate(eventName, ...data)
 
         const handlers = this.#listeners.get(eventName)
 
@@ -31,9 +16,7 @@ export default class EventEmitter {
     }
 
     on(eventName, fn) {
-        if (eventName == null) {
-            throw new Error('Specify an event name')
-        }
+        this.validate(eventName, fn)
 
         if (!this.#listeners.has(eventName)) {
             this.#listeners.set(eventName, new Set())
@@ -132,6 +115,39 @@ export default class EventEmitter {
             handlers.clear()
         } else {
             handlers.delete(fn)
+        }
+    }
+
+    validate(eventName) {
+        if (eventName == null) {
+            throw new Error('Specify an event name')
+        }
+    }
+}
+
+export class EventEmitterChain extends EventEmitter {
+    #listeners = new Map()
+    #parent
+
+    constructor(parent) {
+        super()
+        this.#parent = parent
+    }
+
+    emit(eventName, ...args) {
+        let stopPropagation = false
+
+        super.emit(
+            eventName,
+            {
+                data: singleValueOrIter(args),
+                stopPropagation: () => stopPropagation = true,
+                target: this
+            }
+        )
+
+        if (this.#parent != null && stopPropagation !== true) {
+            this.#parent.emit(eventName, ...args)
         }
     }
 }
