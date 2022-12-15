@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Drag&Drop</title>
+		<link href="styles.css" rel="stylesheet" />
+	</head>
+	<body>
+		<div class="box">
+			Click me!!!
+		</div>
+
+		<script type="module">
+			import {
+				filter, every, map, on, once, onlyEvent, parallel, repeat, take,
+				seq
+			} from './library.js';
+
+			const $box = document.querySelector('.box');
+			const $body = document.body;
+
+			const asyncIterator = repeat(() => map(
+					seq(
+						once($box, 'mousedown'),
+						every(
+							parallel(
+								on($body, 'mousemove'),
+								on($body, 'mouseup')
+							),
+							onlyEvent('mousemove')
+						),
+					),
+					({ screenX, screenY, type }) => [ screenX, screenY, type ]
+				)
+			);
+
+			(async function(){
+				let initial
+
+				for await (const [ x, y, action ] of asyncIterator) {
+					switch (action) {
+						case 'mousedown': {
+							initial ??= [ x, y ]
+							break
+						}
+
+						default: {
+							const _x = x - initial[ 0 ]
+							const _y = y - initial[ 1 ]
+
+							$box.style.transform = `translate(${_x}px, ${_y}px)`
+						}
+					}
+				}
+			})();
+		</script>
+	</body>
+</html>

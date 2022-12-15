@@ -2,20 +2,18 @@
 <html lang="en" dir="ltr">
 	<head>
 		<meta charset="utf-8">
-		<title>Once/on events async iterators</title>
+		<title>Stream event transformers</title>
+		<link href="styles.css" rel="stylesheet" />
 	</head>
 	<body>
-		<div
-			id="test"
-			style="height:100px;width:100px;background-color:red;color:white;line-height:100px;text-align:center;"
-		>
+		<div class="box">
 			Click me!!!
 		</div>
 
 		<script type="module">
 			import { filter, map, on, once, take, seq } from './library.js';
 
-			const $el = document.getElementById('test');
+			const $box = document.querySelector('.box');
 
 			const asyncIterator = seq(
 				once(document.body, 'mousedown'),
