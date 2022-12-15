@@ -8,6 +8,16 @@ export async function* on($element, eventName) {
 	}
 }
 
+export function onlyEvent(eventName) {
+	return function(obj) {
+		return (
+			obj instanceof Event
+			&&
+			obj.type === eventName
+		)
+	}
+}
+
 export async function* take(asyncIterator, count = 1) {
 	let index = 0
 
@@ -30,10 +40,36 @@ export async function* seq(...asyncIterators) {
 	}
 }
 
+export async function* parallel(...asyncIterators) {
+	const promise = {};
+
+	for (const asyncIterator of asyncIterators) {
+		(async function(){
+			for await (const res of asyncIterator) {
+				promise.resolve(res)
+			}
+		})()
+	}
+
+	while(true) {
+		yield await new Promise(resolve => promise.resolve = resolve)
+	}
+}
+
 export async function* filter(asyncIterator, predicate) {
 	for await(const res of asyncIterator) {
 		if (!predicate?.(res)) {
 			continue
+		}
+
+		yield res
+	}
+}
+
+export async function* every(asyncIterator, predicate) {
+	for await(const res of asyncIterator) {
+		if (!predicate?.(res)) {
+			return
 		}
 
 		yield res
@@ -49,6 +85,14 @@ export async function* map(asyncIterator, ...modifiers) {
 		}
 
 		yield value
+	}
+}
+
+export async function* repeat(asyncIteratorFn) {
+	while (true) {
+		for await (const res of asyncIteratorFn()) {
+			yield res
+		}
 	}
 }
 
