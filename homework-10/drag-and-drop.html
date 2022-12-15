@@ -6,9 +6,7 @@
 		<link href="styles.css" rel="stylesheet" />
 	</head>
 	<body>
-		<div
-			class="box"
-		>
+		<div class="box">
 			Click me!!!
 		</div>
 
@@ -40,9 +38,6 @@
 				let initial
 
 				for await (const [ x, y, action ] of asyncIterator) {
-
-					console.log('>', [ x, y, action ], initial)
-
 					switch (action) {
 						case 'mousedown': {
 							initial ??= [ x, y ]
