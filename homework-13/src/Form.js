@@ -30,7 +30,10 @@ const Form = ({ ctx }) => (
 )
 
 Form.propTypes = {
-	emit: PropTypes.func
+	ctx: PropTypes.shape({
+		emit: PropTypes.func,
+		ref: PropTypes.object
+	})
 }
 
 export default withVisitor(Form)
